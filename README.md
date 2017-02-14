@@ -120,6 +120,32 @@ CONTAINER ID        IMAGE                        COMMAND                  CREATE
 4850f6e875dc        hyperledger/fabric-orderer   "orderer"                2 minutes ago       Up 2 minutes        0.0.0.0:5005->5005/tcp, 7050/tcp                 orderer
 ```
 
+####Now Its' time to create a channel and join the peer to the channel 
+(Don't yell yet me,.... I gotta try with multiple peers my self yet)
+
+start/execute **CLI container**
+```
+docker exec -it cli bash
+```
+#####Create channel
+And ask orderer to create a channel for you
+
+```
+CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp/sampleconfig CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:5005 peer channel create -c myc1
+```
+
+On successful creation, a genesis block **myc1.block** is saved in current directory. 
+where **myc1.block** is the block that was received from the orderer from the create channel command.
+
+#####Join channel
+Execute the join command to peer0 in the CLI container.
+
+```
+CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp/sampleconfig CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:5005 CORE_PEER_ADDRESS=peer0:7051  peer channel join -b myc1.block
+```
+
+
+
 ####Deploy
 ####1. Install chaincode on peer0
 
