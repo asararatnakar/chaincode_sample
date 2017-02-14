@@ -155,6 +155,8 @@ func (t *cryptoChaincode) Decrypt(key []byte, ciphertext []byte) []byte {
 }
 
 func (t *cryptoChaincode) writeTransaction(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	//Before save the state Encrypt and Decrypt the data
+	//This is to make the chaincode spend more time executing the extra operations.
 	cryptoArg := t.encryptAndDecrypt(args[2])
 	err := stub.PutState(args[1], cryptoArg)
 	if err != nil {
