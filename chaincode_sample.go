@@ -68,26 +68,29 @@ func (t *cryptoChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 
 //Invoke implements chaincode's Invoke interface
 func (t *cryptoChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
-	args := stub.GetArgs()
+	function, args := stub.GetFunctionAndParameters()
+	if function != "invoke" {
+		return shim.Error("Unknown function call")
+	}
+
 	if len(args) < 2 {
 		return shim.Error(fmt.Sprintf("invalid number of args %d", len(args)))
 	}
-	f := string(args[0])
-	if f == "put" {
+	method := args[0]
+	if method == "put" {
 		if len(args) < 3 {
 			return shim.Error(fmt.Sprintf("invalid number of args for put %d", len(args)))
 		}
 		return t.writeTransaction(stub, args)
-	} else if f == "get" {
+	} else if method == "get" {
 		return t.readTransaction(stub, args)
 	}
-	return shim.Error(fmt.Sprintf("unknown function %s", f))
+	return shim.Error(fmt.Sprintf("unknown function %s", method))
 }
 
 func (t *cryptoChaincode) encryptAndDecrypt(arg string) []byte {
-	//value := arg
 	AES_key, _ := t.GenAESKey()
-	AES_enc := t.Encrypt(AES_key, []byte(arg)) //imagebytes)
+	AES_enc := t.Encrypt(AES_key, []byte(arg))
 
 	value := t.Decrypt(AES_key, AES_enc)
 	return value
@@ -101,7 +104,7 @@ func (t *cryptoChaincode) Encrypt(key []byte, byteArray []byte) []byte {
 		panic(err)
 	}
 
-	// Empty array of 16 + ba length
+	// Empty array of 16 + byteArray length
 	// Include the IV at the beginning
 	ciphertext := make([]byte, aes.BlockSize+len(byteArray))
 
@@ -116,7 +119,7 @@ func (t *cryptoChaincode) Encrypt(key []byte, byteArray []byte) []byte {
 	// Return an encrypted stream
 	stream := cipher.NewCFBEncrypter(block, iv)
 
-	// Encrypt bytes from ba to ciphertext
+	// Encrypt bytes from byteArray to ciphertext
 	stream.XORKeyStream(ciphertext[aes.BlockSize:], byteArray)
 
 	return ciphertext
@@ -151,18 +154,18 @@ func (t *cryptoChaincode) Decrypt(key []byte, ciphertext []byte) []byte {
 	return ciphertext
 }
 
-func (t *cryptoChaincode) writeTransaction(stub shim.ChaincodeStubInterface, args [][]byte) pb.Response {
-	cryptoArg := t.encryptAndDecrypt(string(args[2]))
-	err := stub.PutState(string(args[1]), cryptoArg)
+func (t *cryptoChaincode) writeTransaction(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	cryptoArg := t.encryptAndDecrypt(args[2])
+	err := stub.PutState(args[1], cryptoArg)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 	return shim.Success([]byte("OK"))
 }
 
-func (t *cryptoChaincode) readTransaction(stub shim.ChaincodeStubInterface, args [][]byte) pb.Response {
+func (t *cryptoChaincode) readTransaction(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	// Get the state from the ledger
-	val, err := stub.GetState(string(args[1]))
+	val, err := stub.GetState(args[1])
 	if err != nil {
 		return shim.Error(err.Error())
 	}
