@@ -182,7 +182,7 @@ Enter CLI cntainer
 docker exec -it cli bash
 ```
 Execute **instantiate** command from shell
-(**TODO**: Check if version can be omitted here ? )
+
 ```
 CORE_PEER_ADDRESS=peer0:7051 CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:5005 peer chaincode instantiate -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":["init",""]}'
 ```
