@@ -50,9 +50,9 @@ Chaincode dpeloy is a two step process
 2) **Instantiate**
 
 ```
-peer chaincode install -C myc1 -n mycc -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}' -v 1.0
+peer chaincode install -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample
 
-peer chaincode instantiate -C myc1 -n mycc -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}' -v 1.0
+peer chaincode instantiate -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}'
 ```
 
 ####Invoke
@@ -156,7 +156,7 @@ docker exec -e GOPATH=/opt/gopath -it peer0 bash
 execute the **install** command on peer0
 
 ```
-CORE_PEER_ADDRESS=peer0:7051 CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:5005 peer chaincode install -C myc1 -n mycc -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":["init",""]}' -v 1.0
+CORE_PEER_ADDRESS=peer0:7051 CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:5005 peer chaincode install -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample
 
 ```
 
@@ -174,7 +174,7 @@ docker exec -it cli bash
 Execute **instantiate** command from shell
 (**TODO**: Check if version can be omitted here ? )
 ```
-CORE_PEER_ADDRESS=peer0:7051 CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:5005 peer chaincode instantiate -C myc1 -n mycc -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":["init",""]}' -v 1.0
+CORE_PEER_ADDRESS=peer0:7051 CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:5005 peer chaincode instantiate -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":["init",""]}'
 ```
 
 ####3. Invoke:
