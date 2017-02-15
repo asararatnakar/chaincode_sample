@@ -3,11 +3,11 @@ A sample chaincode with crypto operations like encrypt/decrypt
 
 Credits: referred this from [here](https://github.com/hyperledger/fabric/blob/master/docs/channel-setup.md)
 
-###Vagrant Environment using default channel "testchainid" (Using native binaries)
+###1) Vagrant Environment using default channel "testchainid" (Using native binaries)
 ```
 cd /opt/gopath/src/github.com/hyperledger/fabric
 ```
-Vagrant window 1 - **start orderer**
+ Vagrant window 1 - **start orderer**
 ```
 ORDERER_GENERAL_LOGLEVEL=debug ORDERER_GENERAL_LOCALMSPDIR=./msp/sampleconfig orderer
 ```
@@ -38,7 +38,7 @@ peer chaincode invoke -C testchainid -n mycc -c '{"Args":["put","a","yugfoiuehyo
 ```
 peer chaincode query -C testchainid -n mycc -c '{"Args":["get","a"]}'
 ```
-###Vagrant Environment NON Default chainid(Using native binaries)
+###2) Vagrant Environment NON Default chainid(Using native binaries)
 ```
 vagrant ssh
 ```
@@ -107,7 +107,7 @@ peer chaincode invoke -C myc1 -n mycc -c '{"Args":["put","a","yugfoiuehyorye87y4
 peer chaincode query -C myc1 -n mycc -c '{"Args":["get","a"]}'
 ```
 
-### Using Docker Images
+###3) Using Docker Images
 Clone fabric repo
 ```
 git clone https://github.com/hyperledger/fabric.git
