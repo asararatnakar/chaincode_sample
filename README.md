@@ -49,9 +49,13 @@ Chaincode dpeloy is a two step process
 1) **Install** & 
 2) **Instantiate**
 
+####Install
 ```
 peer chaincode install -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample
+```
 
+####Instantiate
+```
 peer chaincode instantiate -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}'
 ```
 
