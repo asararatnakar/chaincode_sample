@@ -82,7 +82,7 @@ make docker
 Upon success you should see will see all the images similar to below
 
 ```
-$ doker imagesfa
+$ docker images
 REPOSITORY                     TAG                             IMAGE ID            CREATED             SIZE
 hyperledger/fabric-kafka       latest                          c9e9b89fa0e2        3 hours ago         1.3 GB
 hyperledger/fabric-kafka       x86_64-0.7.0-snapshot-2c8bcf0   c9e9b89fa0e2        3 hours ago         1.3 GB
