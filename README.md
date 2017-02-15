@@ -157,6 +157,12 @@ Go to peer0 with GOPATH set
 ```
 docker exec -e GOPATH=/opt/gopath -it peer0 bash
 ```
+**NOTE**: Above command might not work on docker version < 1.13. Adding below entry after this [line](https://github.com/hyperledger/fabric/blob/master/docs/docker-compose-channel.yml#L39) might solve this issue.
+
+```
+      - GOPATH=/opt/gopath/
+```
+
 execute the **install** command on peer0
 
 ```
