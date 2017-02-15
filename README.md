@@ -65,12 +65,12 @@ peer chaincode instantiate -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabr
 
 ####Invoke
 ```
-peer chaincode invoke -C peer chaincode invoke -C myc1 -n mycc -c '{"Args":["put","a","yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou"]}'
+peer chaincode invoke -C myc1 -n mycc -c '{"Args":["put","a","yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou"]}'
 ```
 
 ####Query
 ```
-peer chaincode query -C myc1 -n mycc -c '{"Args":["query","a"]}'
+peer chaincode query -C myc1 -n mycc -c '{"Args":["get","a"]}'
 ```
 
 ### Using Docker Images
