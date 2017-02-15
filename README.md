@@ -7,6 +7,10 @@ Credits: referred this from [here](https://github.com/hyperledger/fabric/blob/ma
 ```
 vagrant ssh
 ```
+Make sure you clear the folder `/var/hyperledger/` after each run
+```
+rm -rf /var/hyperledger/*
+```
 
 Run all the commands from below directory
 ```
