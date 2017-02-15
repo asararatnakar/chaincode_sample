@@ -3,7 +3,7 @@ A sample chaincode with crypto operations like encrypt/decrypt
 
 Credits: referred this from [here](https://github.com/hyperledger/fabric/blob/master/docs/channel-setup.md)
 
-###Using Vagrant
+###Vagrant Environment (Using native binaries)
 ```
 vagrant ssh
 ```
@@ -69,7 +69,7 @@ peer chaincode invoke -C peer chaincode invoke -C testchainid -n mycc -c '{"Args
 peer chaincode query -C testchainid -n mycc -c '{"Args":["query","a"]}'
 ```
 
-### Using Docker-compose
+### Using Docker Images
 Clone fabric repo
 ```
 git clone https://github.com/hyperledger/fabric.git
