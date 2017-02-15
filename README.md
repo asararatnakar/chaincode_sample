@@ -3,7 +3,42 @@ A sample chaincode with crypto operations like encrypt/decrypt
 
 Credits: referred this from [here](https://github.com/hyperledger/fabric/blob/master/docs/channel-setup.md)
 
-###Vagrant Environment (Using native binaries)
+###Vagrant Environment using default channel "testchainid" (Using native binaries)
+```
+cd /opt/gopath/src/github.com/hyperledger/fabric
+```
+Vagrant window 1 - **start orderer**
+```
+ORDERER_GENERAL_LOGLEVEL=debug ORDERER_GENERAL_LOCALMSPDIR=./msp/sampleconfig orderer
+```
+where **myc1.block** is the block that was received from the orderer from the create channel command.
+
+
+####Deploy chaincode
+Chaincode dpeloy is a two step process
+1) **Install** & 
+2) **Instantiate**
+
+####Install
+```
+peer chaincode install -C testchainid -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample
+```
+
+####Instantiate
+```
+peer chaincode instantiate -C testchainid -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}'
+```
+
+####Invoke
+```
+peer chaincode invoke -C testchainid -n mycc -c '{"Args":["put","a","yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou"]}'
+```
+
+####Query
+```
+peer chaincode query -C testchainid -n mycc -c '{"Args":["get","a"]}'
+```
+###Vagrant Environment NON Default chainid(Using native binaries)
 ```
 vagrant ssh
 ```
@@ -11,21 +46,20 @@ Make sure you clear the folder `/var/hyperledger/` after each run
 ```
 rm -rf /var/hyperledger/*
 ```
-
-Run all the commands from below directory
+Execute following commands from fabric
 ```
 cd /opt/gopath/src/github.com/hyperledger/fabric
 ```
 
 Build the executables orderer and peer with `make native` command
  
-####Create a channel
+
 Vagrant window 1 - **start orderer**
 ```
-ORDERER_GENERAL_LOGLEVEL=debug orderer
+ORDERER_GENERAL_LOGLEVEL=debug ORDERER_GENERAL_LOCALMSPDIR=./msp/sampleconfig orderer
 ```
 
-
+####Create a channel
 Vagrant window 2 - ask orderer to **create a chain**
 
 ```
