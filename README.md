@@ -1,5 +1,5 @@
 <center> <h1>A sample chaincode for V1.0 basic testing</h1> </center>
-(A sample chaincode with crypto operations like encrypt/decrypt)
+(A sample chaincode with crypto operations like encrypt/decrypt added for some performance testing)
 
 
 **Credits**: Referred Murali's content from [here](https://github.com/hyperledger/fabric/blob/master/docs/channel-setup.md)
