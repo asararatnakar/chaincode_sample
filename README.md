@@ -4,7 +4,8 @@
 
 **Credits**: Referred Murali's content from [here](https://github.com/hyperledger/fabric/blob/master/docs/channel-setup.md)
 
-Make sure you cloned this file under your fabric examples
+Make sure you cloned this chaincode, the following instructions requires this chaincode.
+(You can use your own chaincode though, make sure to correct the parameters)
 ```
 cd <dir-where-fabric-cloned>/fabric/examples/chaincode/go
 
