@@ -205,7 +205,7 @@ CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp/sampleconfig CORE_PEER_COMMI
 
 
 ####Deploy
-####1. Install chaincode on peer0
+#### Install chaincode on peer0
 
 Go to peer0 with GOPATH set
 ```
@@ -229,7 +229,7 @@ Exit the peer0 container:
 exit
 ```
 
-####2. Instantiate chaincode from CLI container
+#### Instantiate chaincode from CLI container
 
 Enter CLI cntainer
 ```
@@ -241,14 +241,14 @@ Execute **instantiate** command from shell
 CORE_PEER_ADDRESS=peer0:7051 CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:5005 peer chaincode instantiate -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":["init",""]}'
 ```
 
-####3. Invoke:
+#### Invoke:
 
 Continue executing these commands on the CLI container
 ```
 peer chaincode invoke -C myc1 -n mycc -c '{"Args":["put","a","8qewiuyeiwqe9ijcknx,mcn,mxzn987098709870987987097098709870"]}'
 ```
 
-####4. Query:
+#### Query:
 
 Continue executing these commands on the CLI container
 
