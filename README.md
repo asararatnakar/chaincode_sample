@@ -105,6 +105,7 @@ peer chaincode instantiate -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabr
 ```
 peer chaincode invoke -C myc1 -n mycc -c '{"Args":["put","a","yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou"]}'
 ```
+**NOTE** wait for few seconds
 
 ####Query
 ```
