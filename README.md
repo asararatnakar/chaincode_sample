@@ -1,7 +1,17 @@
-# chaincode_sample
-A sample chaincode with crypto operations like encrypt/decrypt
+<center> <h1>A sample chaincode for V1.0 basic testing</h1> </center>
+(A sample chaincode with crypto operations like encrypt/decrypt)
 
-Credits: referred this from [here](https://github.com/hyperledger/fabric/blob/master/docs/channel-setup.md)
+
+**Credits**: Referred Murali's content from [here](https://github.com/hyperledger/fabric/blob/master/docs/channel-setup.md)
+
+Make sure you cloned this file under your fabric examples
+```
+cd <dir-where-fabric-cloned>/fabric/examples/chaincode/go
+
+mkdir chaincode_sample
+
+curl -O https://raw.githubusercontent.com/asararatnakar/chaincode_sample/master/chaincode_sample.go
+```
 
 ###1) Vagrant Environment using default channel "testchainid" (Using native binaries)
 ```
