@@ -13,7 +13,11 @@ ORDERER_GENERAL_LOGLEVEL=debug ORDERER_GENERAL_LOCALMSPDIR=./msp/sampleconfig or
 ```
 where **myc1.block** is the block that was received from the orderer from the create channel command.
 
-
+Vagrant window 2 - start the peer with default chainid **testchainid**
+```
+peer node start
+```
+Vagrant window 3 - Deploy (Install/Instantiate), Invoke and Query
 ####Deploy chaincode
 Chaincode dpeloy is a two step process
 1) **Install** & 
