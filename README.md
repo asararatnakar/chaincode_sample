@@ -36,7 +36,7 @@ Chaincode dpeloy is a two step process
 
 ####Install
 ```
-peer chaincode install -C testchainid -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample
+peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample
 ```
 
 ####Instantiate
@@ -104,7 +104,7 @@ Chaincode dpeloy is a two step process
 
 ####Install
 ```
-peer chaincode install -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample
+peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample
 ```
 
 ####Instantiate
