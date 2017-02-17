@@ -17,6 +17,7 @@ curl -O https://raw.githubusercontent.com/asararatnakar/chaincode_sample/master/
 ###1) Vagrant Environment using default channel "testchainid" (Using native binaries)
 ```
 cd /opt/gopath/src/github.com/hyperledger/fabric
+make native
 ```
  Vagrant window 1 - **start orderer**
 ```
