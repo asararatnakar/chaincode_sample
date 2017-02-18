@@ -4,7 +4,7 @@
 
 **Credits**: Referred Murali's content from [here](https://github.com/hyperledger/fabric/blob/master/docs/channel-setup.md)
 ```
-This is Verified on commit level **7e35a6427a9bf7f903a567df48a6f32ee076d8be**
+This is Verified on commit level **50372c16c76fb2bfbafb2f8ffaf085f085b75b1c**
 ```
 
 Make sure you cloned this chaincode, the following instructions (for Vagrant environment) requires this chaincode.
