@@ -6,9 +6,8 @@
 
 ###Important !!!
 This has been verified on commit level **2ecb22a89d8d17a1ad7e0f355b3066f64328a4a8** & cherrypick Murali's fix **6219**
-```
-git reset --hard 2ecb22a89d8d17a1ad7e0f355b3066f64328a4a8
 
+```
 git fetch ssh://<LFID>@gerrit.hyperledger.org:29418/fabric refs/changes/19/6219/2 && git cherry-pick FETCH_HEAD
 ```
 **NOTE** replace LFID with your actual LFID username
