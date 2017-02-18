@@ -134,6 +134,8 @@ peer chaincode query -C myc1 -n mycc -c '{"function":"invoke","Args":["get","a"]
 ```
 
 ###3) Using Docker Images
+Make sure you read this important note [here](https://github.com/asararatnakar/chaincode_sample/blob/master/README.md#important-) and then follow the instructions here:
+
 Clone fabric repo and this repo
 ```
 git clone https://github.com/hyperledger/fabric.git
