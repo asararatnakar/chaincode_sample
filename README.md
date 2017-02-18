@@ -11,7 +11,7 @@ cd <dir-where-fabric-cloned>/fabric/examples/chaincode/go
 
 mkdir chaincode_sample
 
-curl -O https://raw.githubusercontent.com/asararatnakar/chaincode_sample/master/chaincode_sample.go
+curl -O https://raw.githubusercontent.com/asararatnakar/chaincode_sample/master/examples/chaincode/go/chaincode_sample/chaincode_sample.go
 ```
 
 ###1) Vagrant Environment using default channel "testchainid" (Using native binaries)
