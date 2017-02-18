@@ -216,14 +216,18 @@ docker logs -f cli
 
 At the end of the result you will see something like below:
 ```
-2017-02-18 04:29:11.213 UTC [main] main -> INFO 009 Exiting.....
-2017-02-18 04:29:21.250 UTC [logging] InitFromViper -> DEBU 001 Setting default logging level to DEBUG for command 'chaincode'
-2017-02-18 04:29:21.251 UTC [msp] GetLocalMSP -> DEBU 002 Returning existing local MSP
-2017-02-18 04:29:21.251 UTC [msp] GetDefaultSigningIdentity -> DEBU 003 Obtaining default signing identity
-2017-02-18 04:29:21.251 UTC [msp] Sign -> DEBU 004 Sign: plaintext: 0A80080A38080322046D7963312A2432...0A06696E766F6B650A036765740A0161 
-2017-02-18 04:29:21.252 UTC [msp] Sign -> DEBU 005 Sign: digest: 150C43DE54051AD0F0673B0E21824C08D142FDA1175F255965DB6A915F5B848E 
+2017-02-18 23:34:53.923 UTC [logging] InitFromViper -> DEBU 001 Setting default logging level to DEBUG for command 'chaincode'
+2017-02-18 23:34:53.924 UTC [msp] GetLocalMSP -> DEBU 002 Returning existing local MSP
+2017-02-18 23:34:53.924 UTC [msp] GetDefaultSigningIdentity -> DEBU 003 Obtaining default signing identity
+2017-02-18 23:34:53.925 UTC [SW_BCCSP] createKeyStoreIfNotExists -> INFO 004 KeyStore path [/tmp] missing [true]: [<clean>]
+2017-02-18 23:34:53.925 UTC [SW_BCCSP] createKeyStore -> DEBU 005 Creating KeyStore at [/tmp]...
+2017-02-18 23:34:53.925 UTC [SW_BCCSP] createKeyStore -> DEBU 006 KeyStore created at [/tmp].
+2017-02-18 23:34:53.925 UTC [SW_BCCSP] openKeyStore -> DEBU 007 KeyStore opened at [/tmp]...done
+2017-02-18 23:34:53.925 UTC [msp] Sign -> DEBU 008 Sign: plaintext: 0A88080A40080322046D7963312A2C55...0A06696E766F6B650A036765740A0161 
+2017-02-18 23:34:53.925 UTC [msp] Sign -> DEBU 009 Sign: digest: 62D1C2B93FA4F137B460265DF3458A1078EBF0062F6C9332FB66E5EEF46A2745 
 Query Result: yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou
-2017-02-18 04:29:21.257 UTC [main] main -> INFO 006 Exiting.....
+2017-02-18 23:34:53.932 UTC [main] main -> INFO 00a Exiting.....
+===================== Query on chaincode on PEER0 is successful =====================
 ```
 
 #### How can I see chaincode logs ?
