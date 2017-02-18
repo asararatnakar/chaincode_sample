@@ -33,11 +33,8 @@ services:
       - ORDERER_CFG_PATH=/etc/hyperledger/fabric
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
     command: orderer
-    #This works with solo orderer not kafka
-    #TOOD: why peer0 ?
     volumes:
-        - /opt/gopath/src/github.com/hyperledger/fabric/common/configtx/tool/genesis.yaml:/etc/hyperledger/fabric/genesis.yaml
-        - ./crypto/peer0:/opt/gopath/src/github.com/hyperledger/fabric/orderer/msp/sampleconfig
+        - ./common/configtx/tool/genesis.yaml:/etc/hyperledger/fabric/genesis.yaml
     ports:
       - 7050:7050
     networks:
