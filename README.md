@@ -4,7 +4,8 @@
 
 **Credits**: Referred Murali's content from [here](https://github.com/hyperledger/fabric/blob/master/docs/channel-setup.md)
 
-This has been verified on commit level **2ecb22a89d8d17a1ad7e0f355b3066f64328a4a8** & cherrypick Murali's fix *6219**
+###Important !!!
+This has been verified on commit level **2ecb22a89d8d17a1ad7e0f355b3066f64328a4a8** & cherrypick Murali's fix **6219**
 ```
 git reset --hard 2ecb22a89d8d17a1ad7e0f355b3066f64328a4a8
 
