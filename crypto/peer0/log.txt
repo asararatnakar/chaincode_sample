@@ -1,0 +1,8 @@
+panic: Fatal error when setting up MSP from directory peer0: err Could not load a valid ca certificate from directory peer0/cacerts, err Could not read directory open peer0/cacerts: no such file or directory, err peer0/cacerts
+
+
+goroutine 1 [running]:
+panic(0xb85c20, 0xc4201f15d0)
+	/opt/go/src/runtime/panic.go:500 +0x1a1
+main.main()
+	/opt/gopath/src/github.com/hyperledger/fabric/peer/main.go:113 +0x754

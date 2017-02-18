@@ -63,6 +63,7 @@ func (t *cryptoChaincode) GenAESKey() ([]byte, error) {
 
 //Init implements chaincode's Init interface
 func (t *cryptoChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
+	fmt.Printf("Instantiate chaincode \n\n")
 	return shim.Success(nil)
 }
 
@@ -81,8 +82,10 @@ func (t *cryptoChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		if len(args) < 3 {
 			return shim.Error(fmt.Sprintf("invalid number of args for put %d", len(args)))
 		}
+		fmt.Printf("Invoke chaincode\n")
 		return t.writeTransaction(stub, args)
 	} else if method == "get" {
+		fmt.Printf("Query Chaincode\n")
 		return t.readTransaction(stub, args)
 	}
 	return shim.Error(fmt.Sprintf("unknown function %s", method))
@@ -155,10 +158,12 @@ func (t *cryptoChaincode) Decrypt(key []byte, ciphertext []byte) []byte {
 }
 
 func (t *cryptoChaincode) writeTransaction(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	fmt.Printf("----- Write Transaction -----\n")
 	//Before save the state Encrypt and Decrypt the data
 	//This is to make the chaincode spend more time executing the extra operations.
 	cryptoArg := t.encryptAndDecrypt(args[2])
 	err := stub.PutState(args[1], cryptoArg)
+	fmt.Printf("%s ==> \"%s\" \n\n", args[1], args[2])
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -166,8 +171,10 @@ func (t *cryptoChaincode) writeTransaction(stub shim.ChaincodeStubInterface, arg
 }
 
 func (t *cryptoChaincode) readTransaction(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	fmt.Printf("------ Read Transaction -----\n")
 	// Get the state from the ledger
 	val, err := stub.GetState(args[1])
+	fmt.Printf("%s ==> \"%s\" \n\n", args[1], val)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
