@@ -305,3 +305,17 @@ The result of the above command should be as below
 ```
 Query Result: yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou
 ```
+
+###Troubleshoot
+
+1. If you are see the below error 
+```
+Error: Error endorsing chaincode: rpc error: code = 2 desc = Error installing chaincode code mycc:1.0(chaincode /var/hyperledger/production/chaincodes/mycc.1.0 exits)
+```
+
+Probably you have the images (ex **_peer0-peer0-mycc-1.0_** or **_peer1-peer0-mycc1-1.0_**) from your prevoous runs
+Remove them and retry again. here is a helper command
+
+```
+docker rmi -f $(docker images | grep peer[0-9]-peer[0-9] | awk '{print $3}')
+```
