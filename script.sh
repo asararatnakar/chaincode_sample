@@ -25,8 +25,10 @@ YXlXCyNbP2hvd7+sJPmyBSvZRzf/jfMdTZaDKlEr7Q==
 -----END CERTIFICATE-----
 EOF
 
+###TODO: Add checks for the results
 CORE_PEER_GOSSIP_IGNORESECURITY=true CORE_PEER_COMMITTER_LEDGER_ORDERER=$ORDERER_IP:7050 peer channel create -c myc1 -a anchorPeer.txt >log.txt 2>&1
-echo "Chain created"
+cat log.txt
+echo "===================== channel \"myc1\" is created successfully ===================== "
 echo
 CORE_PEER_COMMITTER_LEDGER_ORDERER=$ORDERER_IP:7050 CORE_PEER_ADDRESS=$PEER0_IP:7051 peer channel join -b myc1.block >log.txt 2>&1
 cat log.txt
@@ -34,15 +36,18 @@ CORE_PEER_COMMITTER_LEDGER_ORDERER=$ORDERER_IP:7050 CORE_PEER_ADDRESS=$PEER1_IP:
 cat log.txt
 CORE_PEER_COMMITTER_LEDGER_ORDERER=$ORDERER_IP:7050 CORE_PEER_ADDRESS=$PEER2_IP:7051 peer channel join -b myc1.block >log.txt 2>&1
 cat log.txt
-
+echo "===================== All peers joined on the channel \"myc1\" ===================== "
 CORE_PEER_COMMITTER_LEDGER_ORDERER=$ORDERER_IP:7050 CORE_PEER_ADDRESS=$PEER0_IP:7051 peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample >log.txt 2>&1
 cat log.txt
-sleep 10
+echo "===================== Chaincode is installed on remote peer PEER0 ===================== "
 CORE_PEER_COMMITTER_LEDGER_ORDERER=$ORDERER_IP:7050 CORE_PEER_ADDRESS=$PEER0_IP:7051 peer chaincode instantiate -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}' >log.txt 2>&1
 cat log.txt
-sleep 20
+echo "===================== Instantiated chaincode on PEER0 ===================== "
+sleep 15
 CORE_PEER_COMMITTER_LEDGER_ORDERER=$ORDERER_IP:7050 CORE_PEER_ADDRESS=$PEER0_IP:7051 peer chaincode invoke -C myc1 -n mycc -c '{"function":"invoke","Args":["put","a","yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou"]}' >log.txt 2>&1
 cat log.txt
-sleep 10
+echo "===================== Invoke transaction on chaincode===================== "
+sleep 15
 CORE_PEER_COMMITTER_LEDGER_ORDERER=$ORDERER_IP:7050 CORE_PEER_ADDRESS=$PEER0_IP:7051 peer chaincode query -C myc1 -n mycc -c '{"function":"invoke","Args":["get","a"]}' >log.txt 2>&1
 cat log.txt
+echo "===================== Query on chaincode on PEER0 is successful ===================== "

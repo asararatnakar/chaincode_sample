@@ -3,12 +3,17 @@
 
 
 **Credits**: Referred Murali's content from [here](https://github.com/hyperledger/fabric/blob/master/docs/channel-setup.md)
-```
-This is Verified on commit level **50372c16c76fb2bfbafb2f8ffaf085f085b75b1c**
-```
 
-Make sure you cloned this chaincode, the following instructions (for Vagrant environment) requires this chaincode.
-(You can use your own chaincode though, make sure to construct the parameters)
+This has been verified on commit level **2ecb22a89d8d17a1ad7e0f355b3066f64328a4a8** & cherrypick Murali's fix *6219**
+```
+git reset --hard 2ecb22a89d8d17a1ad7e0f355b3066f64328a4a8
+
+git fetch ssh://<LFID>@gerrit.hyperledger.org:29418/fabric refs/changes/19/6219/2 && git cherry-pick FETCH_HEAD
+```
+**NOTE** replace LFID with your actual LFID username
+
+Following instructions (for Vagrant environment) requires sample chaincode from this repo, Make sure you cloned the chaincode
+(You can use your own chaincode though, make sure you pass the right arguments)
 ```
 cd <dir-where-fabric-cloned>/fabric/examples/chaincode/go
 

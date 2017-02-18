@@ -31,10 +31,10 @@ services:
       - ORDERER_GENERAL_LISTENPORT=7050
       - ORDERER_RAMLEDGER_HISTORY_SIZE=100
       - ORDERER_CFG_PATH=/etc/hyperledger/fabric
+      #Temporary work around?
+      - ORDERER_GENERAL_GENESISPROFILE=SampleInsecureSolo
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
     command: orderer
-    volumes:
-        - ./common/configtx/tool/genesis.yaml:/etc/hyperledger/fabric/genesis.yaml
     ports:
       - 7050:7050
     networks:
