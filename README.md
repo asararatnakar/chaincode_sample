@@ -5,12 +5,11 @@
 **Credits**: Referred Murali's content from [here](https://github.com/hyperledger/fabric/blob/master/docs/channel-setup.md)
 
 ###Important !!!
-This has been verified on commit level **2ecb22a89d8d17a1ad7e0f355b3066f64328a4a8** & cherrypick Murali's fix **6219**
+This has been verified on commit level **dd658bf76c68a8791172534e70d71ff28171b96b** 
 
 ```
-git fetch ssh://<LFID>@gerrit.hyperledger.org:29418/fabric refs/changes/19/6219/2 && git cherry-pick FETCH_HEAD
+	git reset --hard dd658bf76c68a8791172534e70d71ff28171b96b
 ```
-**NOTE** replace LFID with your actual LFID username
 
 Following instructions (for Vagrant environment) requires sample chaincode from this repo, Make sure you cloned the chaincode
 (You can use your own chaincode though, make sure you pass the right arguments)
@@ -194,7 +193,7 @@ bb4c16656b8b        hyperledger/fabric-peer      "sh -c './script.s..."   About 
 
 ### How to create a channel and join the peer to the channel
 
-A shellscript **script.sh** is baked inside the cli conatiner, The script will do the below things for you:
+A shellscript **single_channel.sh** is baked inside the cli conatiner, The script will do the below things for you:
 
 * _Creates a channel_ **myc1** with Anchor Peer as peer0 (a text file with Peer0 IP, HOST and Signed Certificate)
 
@@ -252,7 +251,7 @@ a ==> "yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou"
 
 ## How do I create my own channel and join the peers of my interest
 
-These commands are already part of the **script.sh**, below commands are for your reference
+These commands are already part of the **single_channel.sh**, below commands are for your reference
 
 ####Anchor peer
 Change PEER IP , PORT and Signed certificate (cert info will be available under  **_crypto/peer1/signcerts/peer1Signer.pem_** for peer1)

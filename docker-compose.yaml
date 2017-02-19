@@ -42,24 +42,15 @@ services:
   
   peer0:
     container_name: peer0
-    image: hyperledger/fabric-peer
+    extends:
+      file: peer-base/peer-base.yaml
+      service: peer-base
     environment:
-      - CORE_PEER_ADDRESSAUTODETECT=true
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_NETWORKID=peer0
-      - CORE_NEXT=true
-      - CORE_PEER_ENDORSER_ENABLED=true
-      - CORE_PEER_ID=peer0
-      - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050
-      - CORE_PEER_GOSSIP_ORGLEADER=true
-      - CORE_PEER_GOSSIP_IGNORESECURITY=true
-    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     ports:
       - 7051:7051
       - 7053:7053
-    command: peer node start --peer-defaultchain=false
     links:
       - orderer:orderer
     volumes:
@@ -70,26 +61,18 @@ services:
       - orderer
     networks:
       - bridge
+
   peer1:
     container_name: peer1
-    image: hyperledger/fabric-peer
+    extends:
+      file: peer-base/peer-base.yaml
+      service: peer-base
     environment:
-      - CORE_PEER_ADDRESSAUTODETECT=true
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_NETWORKID=peer1
-      - CORE_NEXT=true
-      - CORE_PEER_ENDORSER_ENABLED=true
-      - CORE_PEER_ID=peer0
-      - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050
-      - CORE_PEER_GOSSIP_IGNORESECURITY=true
-      - CORE_PEER_GOSSIP_ORGLEADER=true
-    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     ports:
       - 8051:7051
       - 8053:7053
-    command: peer node start --peer-defaultchain=false
     links:
       - orderer:orderer
       - peer0:peer0
@@ -101,25 +84,18 @@ services:
       - orderer
     networks:
       - bridge
+
   peer2:
     container_name: peer2
-    image: hyperledger/fabric-peer
+    extends:
+      file: peer-base/peer-base.yaml
+      service: peer-base
     environment:
-      - CORE_PEER_ADDRESSAUTODETECT=true
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_NETWORKID=peer2
-      - CORE_NEXT=true
-      - CORE_PEER_ENDORSER_ENABLED=true
-      - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050
-      - CORE_PEER_GOSSIP_IGNORESECURITY=true
-      - CORE_PEER_GOSSIP_ORGLEADER=true
-    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     ports:
       - 9051:7051
       - 9053:7053
-    command: peer node start --peer-defaultchain=false
     links:
       - orderer:orderer
       - peer0:peer0
@@ -158,9 +134,8 @@ services:
     volumes:
         - /var/run/:/host/var/run/
         - ./examples/:/opt/gopath/src/github.com/hyperledger/fabric/examples/
-        #TODO: probably play a bit more here
         - ./crypto/peer0:/opt/gopath/src/github.com/hyperledger/fabric/msp/sampleconfig
-        - ./script.sh:/opt/gopath/src/github.com/hyperledger/fabric/peer/script.sh
+        - ./single_channel.sh:/opt/gopath/src/github.com/hyperledger/fabric/peer/script.sh
     depends_on:
       - orderer
       - peer0
