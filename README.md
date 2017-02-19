@@ -5,10 +5,10 @@
 **Credits**: Referred Murali's content from [here](https://github.com/hyperledger/fabric/blob/master/docs/channel-setup.md)
 
 ###Important !!!
-This has been verified on commit level **dd658bf76c68a8791172534e70d71ff28171b96b** 
+This has been verified on commit level **ef962ca41be5343c942d10741c44b06399017cd6** 
 
 ```
-	git reset --hard dd658bf76c68a8791172534e70d71ff28171b96b
+	git reset --hard ef962ca41be5343c942d10741c44b06399017cd6
 ```
 
 Following instructions (for Vagrant environment) requires sample chaincode from this repo, Make sure you cloned the chaincode
