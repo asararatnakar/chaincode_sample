@@ -30,7 +30,6 @@ services:
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_LISTENPORT=7050
       - ORDERER_RAMLEDGER_HISTORY_SIZE=100
-      - ORDERER_CFG_PATH=/etc/hyperledger/fabric
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
     command: orderer
     ports:
@@ -53,7 +52,7 @@ services:
       - orderer:orderer
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto/peer1:/opt/gopath/src/github.com/hyperledger/fabric/orderer/msp/sampleconfig
+        - ./crypto/peer0:/opt/gopath/src/github.com/hyperledger/fabric/orderer/msp/sampleconfig
         - ./examples/:/opt/gopath/src/github.com/hyperledger/fabric/examples/
     depends_on:
       - orderer
@@ -76,7 +75,7 @@ services:
       - peer0:peer0
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto/peer2:/opt/gopath/src/github.com/hyperledger/fabric/orderer/msp/sampleconfig
+        - ./crypto/peer1:/opt/gopath/src/github.com/hyperledger/fabric/orderer/msp/sampleconfig
         - ./examples/:/opt/gopath/src/github.com/hyperledger/fabric/examples/
     depends_on:
       - orderer
