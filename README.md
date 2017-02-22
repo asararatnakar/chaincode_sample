@@ -132,7 +132,20 @@ peer chaincode query -C myc1 -n mycc -c '{"function":"invoke","Args":["get","a"]
 ```
 
 ###3) Using Docker Images
-Make sure you read this important note [here](https://github.com/asararatnakar/chaincode_sample/blob/master/README.md#important-) and then follow the instructions here:
+Clone fabric repo and this repo
+```
+git clone https://github.com/hyperledger/fabric.git
+cd fabric
+```
+!!!!! **IMPORTANT** !!!!!
+
+Verified on the commit level : **2fc6bc606bc5f732d9b04ce28e1d28dfbd220173**
+
+Cherry pick below patches for End2End Scenario to work (as of today Feb22, 6 pm)
+```
+https://gerrit.hyperledger.org/r/#/c/5955
+https://gerrit.hyperledger.org/r/#/c/6335
+```
 
 Clone fabric repo and this repo
 ```
@@ -195,19 +208,21 @@ bb4c16656b8b        hyperledger/fabric-peer      "sh -c './script.s..."   About 
 
 A shellscript **single_channel.sh** is baked inside the cli conatiner, The script will do the below things for you:
 
-* _Creates a channel_ **myc1** with Anchor Peer as peer0 (a text file with Peer0 IP, HOST and Signed Certificate)
+* _Creates a channel_ **myc1** with configuration transaction generated using configtxgen tool **channelTx** (this is already mounted to cli container)
 
-* peer0, peer1 and peer2 will **Join** the channel
+    As a result of this command **myc1.block** will get created on the file system
 
-* **Install** chaincode *chaincode_sample* remotely onto peer0
+* peer0 (**peerOrg0** ) will **Join** the channel
 
-* **Instantiate**s your chaincode (At this point you will see a seperate container **_peer0-peer0-mycc-1.0_**)
+* **Install** chaincode *chaincode_sample*  on a remote **peer0**
 
-* **Invoke** chaincode (a key with value of interested random payload) - wait for few secs
+* **Instantiate**s your chaincode (At this point you will see a seperate container **_peer0-peer0-mycc-1.0_**) also notice there is a Policy specified with **-P**
 
-* **Query** chaincode, must show the value stored with above transaction
+* **Invoke** chaincode (a key with value of interested random payload) (wait for few secs to complete the tx)
 
-#### How to see the above actions ?
+* **Query** chaincode
+
+#### How do I see the above said actions ?
 check the cli docker container logs
 ```
 docker logs -f cli
@@ -215,18 +230,16 @@ docker logs -f cli
 
 At the end of the result you will see something like below:
 ```
-2017-02-18 23:34:53.923 UTC [logging] InitFromViper -> DEBU 001 Setting default logging level to DEBUG for command 'chaincode'
-2017-02-18 23:34:53.924 UTC [msp] GetLocalMSP -> DEBU 002 Returning existing local MSP
-2017-02-18 23:34:53.924 UTC [msp] GetDefaultSigningIdentity -> DEBU 003 Obtaining default signing identity
-2017-02-18 23:34:53.925 UTC [SW_BCCSP] createKeyStoreIfNotExists -> INFO 004 KeyStore path [/tmp] missing [true]: [<clean>]
-2017-02-18 23:34:53.925 UTC [SW_BCCSP] createKeyStore -> DEBU 005 Creating KeyStore at [/tmp]...
-2017-02-18 23:34:53.925 UTC [SW_BCCSP] createKeyStore -> DEBU 006 KeyStore created at [/tmp].
-2017-02-18 23:34:53.925 UTC [SW_BCCSP] openKeyStore -> DEBU 007 KeyStore opened at [/tmp]...done
-2017-02-18 23:34:53.925 UTC [msp] Sign -> DEBU 008 Sign: plaintext: 0A88080A40080322046D7963312A2C55...0A06696E766F6B650A036765740A0161 
-2017-02-18 23:34:53.925 UTC [msp] Sign -> DEBU 009 Sign: digest: 62D1C2B93FA4F137B460265DF3458A1078EBF0062F6C9332FB66E5EEF46A2745 
+2017-02-22 19:09:14.482 UTC [logging] InitFromViper -> DEBU 001 Setting default logging level to DEBUG for command 'chaincode'
+2017-02-22 19:09:14.483 UTC [msp] GetLocalMSP -> DEBU 002 Returning existing local MSP
+2017-02-22 19:09:14.483 UTC [msp] GetDefaultSigningIdentity -> DEBU 003 Obtaining default signing identity
+2017-02-22 19:09:14.483 UTC [msp] Sign -> DEBU 004 Sign: plaintext: 0A8A050A54080322046D7963312A4035...0A06696E766F6B650A036765740A0161 
+2017-02-22 19:09:14.483 UTC [msp] Sign -> DEBU 005 Sign: digest: 91728931006A512F0CDC4B9850093FF6D7A2593B6C64B94E66F3630AB7F672E1 
 Query Result: yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou
-2017-02-18 23:34:53.932 UTC [main] main -> INFO 00a Exiting.....
-===================== Query on chaincode on PEER0 is successful =====================
+2017-02-22 19:09:14.491 UTC [main] main -> INFO 006 Exiting.....
+===================== Query on chaincode on PEER0 is successful ===================== 
+===================== Single Channel Test execution completed ===================== 
+
 ```
 
 #### How can I see chaincode logs ?
@@ -249,58 +262,54 @@ a ==> "yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou"
 
 ```
 
-## How do I create my own channel and join the peers of my interest
+## How do I create channel and join the peers of my interest
 
-These commands are already part of the **single_channel.sh**, below commands are for your reference
+Commands are available in **single_channel.sh**, 
+these commands are to create a channel and join peer1 to the channel, commands are for your reference.
 
-####Anchor peer
-Change PEER IP , PORT and Signed certificate (cert info will be available under  **_crypto/peer1/signcerts/peer1Signer.pem_** for peer1)
-
+!!! **Important** !!!
+I am using  one peer only i.e, **peer1** for join/instantiate/invoke/query, So I fixed some environment variables. you must change these  accordingly for other peers
 ```
-cat<<EOF>anchorPeer1.txt
-172.17.0.4
-8051
------BEGIN CERTIFICATE-----
-MIIBCzCBsgICA+gwCgYIKoZIzj0EAwIwEzERMA8GA1UEAwwIcGVlck9yZzAwHhcN
-MTcwMTI0MTk1NTQ1WhcNMTgwMTI0MTk1NTQ1WjAQMQ4wDAYDVQQDDAVwZWVyMTBZ
-MBMGByqGSM49AgEGCCqGSM49AwEHA0IABJGk171VnjV2dmpKsuKEzJudLJ5CXtfU
-Q7pq6rsm5xMowNA4BXTjSc2CGsU7ZOXFDl680ur1vav3zeZ6YBtGSWIwCgYIKoZI
-zj0EAwIDSAAwRQIhAJuKIZlHgSPK2x11Al+QeUhy+RbVX0VA0PzBr5UVzUDtAiB/
-DXz3BdQwd20X/p6QSoCqA+sUoP3SQOhfEvbSzuPC9g==
------END CERTIFICATE-----
-EOF
+CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050
+ORDERER_GENERAL_LOCALMSPDIR=/opt/gopath/src/github.com/hyperledger/fabric/chaincode_sample/crypto/peer/peer1/localMspConfig
+CORE_PEER_ADDRESS=$PEER1_IP:7051
+CORE_PEER_LOCALMSPID=MspOrg1
 ```
 
 ####Create channel
 
-Give what ever channel that you want to create here
+Specify the name of the channel  with **-c** option and **-f** must be suplied with Channel creation transaction i.e., **channelTx** (In this case it is **channelTx** , you can mount your own channel txn )
 ```
-CORE_PEER_GOSSIP_IGNORESECURITY=true CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050 peer channel create -c mychannel -a anchorPeer1.txt
+ peer channel create -c mychannel -f channelTx
 ```
 
 ####Join channel
 
 Join peers of your intrest
 ```
-CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050 CORE_PEER_ADDRESS=peer1:7051 peer channel join -b mychannel.block
+ peer channel join -b mychannel.block
 ```
 
 ####Install chaincode remotely
-Installing chaincode onto peer1
+Installing chaincode onto remote peer **peer1**
 ```
-CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050 CORE_PEER_ADDRESS=peer1:7051 peer chaincode install -n mycc1 -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample 
+peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample 
 ```
 
 ####Instantiate chaincode
 Instantiate chaincode, this will launch a chaincode container
 ```
-CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050 CORE_PEER_ADDRESS=peer1:7051 peer chaincode instantiate -C mychannel -n mycc1 -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}'
+peer chaincode instantiate -C mychannel -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}' -P "AND('MspOrg1.member')"
 ```
+
+**NOTE:** 
+* After the above command you will notice a new chaincode container , something like **dev-peer1-mycc-1.0**
+* Also notice the Policy specified with **-P** option
 
 ####Invoke chaincode
 
 ```
-CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050 CORE_PEER_ADDRESS=peer1:7051 peer chaincode invoke -C mychannel -n mycc1 -c '{"function":"invoke","Args":["put","a","yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou"]}'
+peer chaincode invoke -C mychannel -n mycc1 -c '{"function":"invoke","Args":["put","a","yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou"]}'
 ```
 
 **NOTE** Make sure you wait for few seconds
@@ -308,7 +317,7 @@ CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050 CORE_PEER_ADDRESS=peer1:7051 pee
 ####Query chaincode
 
 ```
-CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050 CORE_PEER_ADDRESS=peer1:7051 peer chaincode query -C mychannel -n mycc1 -c '{"function":"invoke","Args":["get","a"]}'
+peer chaincode query -C mychannel -n mycc1 -c '{"function":"invoke","Args":["get","a"]}'
 ```
 The result of the above command should be as below
 
