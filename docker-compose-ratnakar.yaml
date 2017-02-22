@@ -18,8 +18,12 @@ services:
 #    container_name: ca
 
   orderer:
+    container_name: ccenv
+    image: asararatnakar/fabric-ccenv
+
+  orderer:
     container_name: orderer
-    image: hyperledger/fabric-orderer
+    image: asararatnakar/fabric-orderer
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -39,7 +43,7 @@ services:
   peer0:
     container_name: peer0
     extends:
-      file: peer-base/peer-base.yaml
+      file: peer-base/peer-base-ratnakar.yaml
       service: peer-base
     environment:
       - CORE_PEER_ID=peer0
@@ -61,7 +65,7 @@ services:
   peer1:
     container_name: peer1
     extends:
-      file: peer-base/peer-base.yaml
+      file: peer-base/peer-base-ratnakar.yaml
       service: peer-base
     environment:
       - CORE_PEER_ID=peer1
@@ -85,7 +89,7 @@ services:
   peer2:
     container_name: peer2
     extends:
-      file: peer-base/peer-base.yaml
+      file: peer-base/peer-base-ratnakar.yaml
       service: peer-base
     environment:
       - CORE_PEER_ID=peer2

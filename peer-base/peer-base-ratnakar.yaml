@@ -1,7 +1,7 @@
 version: '2'
 services:
   peer-base:
-    image: hyperledger/fabric-peer
+    image: asararatnakar/fabric-peer
     environment:
       - CORE_PEER_ADDRESSAUTODETECT=true
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock

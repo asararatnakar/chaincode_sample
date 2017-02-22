@@ -1,5 +1,5 @@
 #!/bin/sh
-
+#### DONOT USE THIS YET
 # find address of orderer and peers in your network
 ORDERER_IP=`perl -e 'use Socket; $a = inet_ntoa(inet_aton("orderer")); print "$a\n";'`
 PEER0_IP=`perl -e 'use Socket; $a = inet_ntoa(inet_aton("peer0")); print "$a\n";'`
@@ -11,47 +11,11 @@ echo "PEER0 IP $PEER0_IP"
 echo "PEER1 IP $PEER1_IP"
 echo "PEER2 IP $PEER2_IP"
 echo "-----------------------------------------"
-# create an anchor file
-cat<<EOF>anchorPeer1.txt
-$PEER0_IP
-7051
------BEGIN CERTIFICATE-----
-MIIBCzCBsgICA+gwCgYIKoZIzj0EAwIwEzERMA8GA1UEAwwIcGVlck9yZzAwHhcN
-MTcwMTI0MTk1NTQ1WhcNMTgwMTI0MTk1NTQ1WjAQMQ4wDAYDVQQDDAVwZWVyMDBZ
-MBMGByqGSM49AgEGCCqGSM49AwEHA0IABAaE7jdt9VVGTSgwTnKn+r8/ZSQxEruT
-x8++HEmLMM3ae5MkqhiPqvBQIY5JiBMKNKrB7brZWpWishR2yB3cBOswCgYIKoZI
-zj0EAwIDSAAwRQIgFq+ACI//NZgmJb2uyuJ4TFWD9xDf0C2FYSUCZE4eo8ICIQCa
-YXlXCyNbP2hvd7+sJPmyBSvZRzf/jfMdTZaDKlEr7Q==
------END CERTIFICATE-----
-EOF
-cat<<EOF>anchorPeer2.txt
-$PEER1_IP
-8051
------BEGIN CERTIFICATE-----
-MIIBCzCBsgICA+gwCgYIKoZIzj0EAwIwEzERMA8GA1UEAwwIcGVlck9yZzAwHhcN
-MTcwMTI0MTk1NTQ1WhcNMTgwMTI0MTk1NTQ1WjAQMQ4wDAYDVQQDDAVwZWVyMDBZ
-MBMGByqGSM49AgEGCCqGSM49AwEHA0IABAaE7jdt9VVGTSgwTnKn+r8/ZSQxEruT
-x8++HEmLMM3ae5MkqhiPqvBQIY5JiBMKNKrB7brZWpWishR2yB3cBOswCgYIKoZI
-zj0EAwIDSAAwRQIgFq+ACI//NZgmJb2uyuJ4TFWD9xDf0C2FYSUCZE4eo8ICIQCa
-YXlXCyNbP2hvd7+sJPmyBSvZRzf/jfMdTZaDKlEr7Q==
------END CERTIFICATE-----
-EOF
-cat<<EOF>anchorPeer3.txt
-$PEER2_IP
-9051
------BEGIN CERTIFICATE-----
-MIIBCzCBsgICA+gwCgYIKoZIzj0EAwIwEzERMA8GA1UEAwwIcGVlck9yZzAwHhcN
-MTcwMTI0MTk1NTQ1WhcNMTgwMTI0MTk1NTQ1WjAQMQ4wDAYDVQQDDAVwZWVyMDBZ
-MBMGByqGSM49AgEGCCqGSM49AwEHA0IABAaE7jdt9VVGTSgwTnKn+r8/ZSQxEruT
-x8++HEmLMM3ae5MkqhiPqvBQIY5JiBMKNKrB7brZWpWishR2yB3cBOswCgYIKoZI
-zj0EAwIDSAAwRQIgFq+ACI//NZgmJb2uyuJ4TFWD9xDf0C2FYSUCZE4eo8ICIQCa
-YXlXCyNbP2hvd7+sJPmyBSvZRzf/jfMdTZaDKlEr7Q==
------END CERTIFICATE-----
-EOF
+
 
 ###TODO: Add checks for the results
 for ch in 1 2; do
-	CORE_PEER_GOSSIP_IGNORESECURITY=true CORE_PEER_COMMITTER_LEDGER_ORDERER=$ORDERER_IP:7050 peer channel create -c myc$ch -a anchorPeer1.txt,anchorPeer2.txt,anchorPeer3.txt >log.txt 2>&1
+	CORE_PEER_GOSSIP_IGNORESECURITY=true CORE_PEER_COMMITTER_LEDGER_ORDERER=$ORDERER_IP:7050 peer channel create -c myc$ch  >log.txt 2>&1
 	cat log.txt
 	echo "===================== channel \"myc$ch\" is created successfully ===================== "
 done
