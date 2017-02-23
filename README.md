@@ -311,7 +311,7 @@ If you don't want to build your own images, you can use my images by supplying t
 ./network_setup up docker-compose-ratnakar.yaml
 ```
 
-To cleanup the stuff, you *down* command
+To cleanup the stuff, use **down**  option with the command
 ```
 ./network_setup down
 ```
