@@ -1,0 +1,63 @@
+#!/bin/bash
+UP_DOWN=$1
+COMPOSE_FILE=$2
+
+function printHelp {
+	echo "Usage: ./network_setup <up|down> [docker-compose-ratnakar.yaml]"
+}
+
+function validateArgs {
+	if [ -z "${COMPOSE_FILE}" ]; then
+		COMPOSE_FILE=docker-compose.yaml
+	fi
+
+	if [ -z "${UP_DOWN}" ]; then
+		echo "up/down not mentioned"
+		printHelp
+		exit 1
+	fi
+
+        if [ "${UP_DOWN}" == "down" ]; then
+		return
+	fi
+
+}
+
+function dkcl(){
+        CONTAINER_IDS=$(docker ps -aq)
+        if [ -z "$CONTAINER_IDS" -o "$CONTAINER_IDS" = " " ]; then
+                echo "---- No containers available for deletion ----"
+        else
+                docker rm -f $CONTAINER_IDS
+        fi
+}
+
+function dkrm(){
+        DOCKER_IMAGE_IDS=$(docker images | grep "dev\|none\|test-vp\|peer[0-9]-" | awk '{print $3}')
+        if [ -z "$DOCKER_IMAGE_IDS" -o "$DOCKER_IMAGE_IDS" = " " ]; then
+                echo "---- No images available for deletion ----"
+        else
+                docker rmi -f $DOCKER_IMAGE_IDS
+        fi
+}
+
+validateArgs
+
+#Create the network using docker compose
+if [ "${UP_DOWN}" == "up" ]; then
+	docker-compose -f $COMPOSE_FILE up -d 2>&1
+	if [ $? -ne 0 ]; then
+		echo "Oooops !!!! Unable to pull the images "		
+		exit 1
+	fi
+	docker logs -f cli
+elif [ "${UP_DOWN}" == "down" ]; then ##Clean up the network
+        docker-compose -f $COMPOSE_FILE down
+        #Cleanup the chaincode containers
+	dkcl
+	#Cleanup images
+	dkrm
+else
+	printHelp
+	exit 1
+fi
