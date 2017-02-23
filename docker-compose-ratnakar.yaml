@@ -19,7 +19,8 @@ services:
 
   ccenv:
     container_name: ccenv
-    image: asararatnakar/fabric-ccenv
+    build: ./
+    image: hyperledger/fabric-ccenv:x86_64-0.7.0-snapshot-43a3659
 
   orderer:
     container_name: orderer
