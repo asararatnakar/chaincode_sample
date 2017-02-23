@@ -21,47 +21,7 @@ mkdir chaincode_sample
 curl -O https://raw.githubusercontent.com/asararatnakar/chaincode_sample/master/examples/chaincode/go/chaincode_sample/chaincode_sample.go
 ```
 
-###1) Vagrant Environment using default channel "testchainid" (Using native binaries)
-```
-cd /opt/gopath/src/github.com/hyperledger/fabric
-make native
-```
- Vagrant window 1 - **start orderer**
-```
-ORDERER_GENERAL_LOGLEVEL=debug orderer
-```
-where **myc1.block** is the block that was received from the orderer from the create channel command.
-
-Vagrant window 2 - start the peer with default chainid **testchainid**
-```
-peer node start
-```
-Vagrant window 3 - Deploy (Install/Instantiate), Invoke and Query
-####Deploy chaincode
-deploying chaincode is a two step process
-1) **Install** & 
-2) **Instantiate**
-
-####Install
-```
-peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample
-```
-
-####Instantiate
-```
-peer chaincode instantiate -C testchainid -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}'
-```
-
-####Invoke
-```
-peer chaincode invoke -C testchainid -n mycc -c '{"function":"invoke","Args":["put","a","yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou"]}'
-```
-
-####Query
-```
-peer chaincode query -C testchainid -n mycc -c '{"function":"invoke","Args":["get","a"]}'
-```
-###2) Vagrant Environment NON Default chainid(Using native binaries)
+###1) Vagrant Environment NON Default chainid(Using native binaries)
 ```
 vagrant ssh
 ```
@@ -131,7 +91,7 @@ peer chaincode invoke -C myc1 -n mycc -c '{"function":"invoke","Args":["put","a"
 peer chaincode query -C myc1 -n mycc -c '{"function":"invoke","Args":["get","a"]}'
 ```
 
-###3) Using Docker Images
+###2) Using Docker Images
 Clone fabric repo and this repo
 ```
 git clone https://github.com/hyperledger/fabric.git
@@ -337,4 +297,21 @@ Remove them and retry again. here is a helper command
 
 ```
 docker rmi -f $(docker images | grep peer[0-9]-peer[0-9] | awk '{print $3}')
+```
+
+###MISC
+Now you can launch network using a shell script
+```
+./network_setup up 
+```
+Default option is to use hyperledger images
+
+If you don't want to build your own images, you can use my images by supplying the docker-compose file
+```
+./network_setup up docker-compose-ratnakar.yaml
+```
+
+To cleanup the stuff, you *down* command
+```
+./network_setup down
 ```
