@@ -98,25 +98,34 @@ git clone https://github.com/hyperledger/fabric.git
 cd fabric
 ```
 !!!!! **IMPORTANT** !!!!!
-
+### Pre-reqs
 Verified on the commit level : **2fc6bc606bc5f732d9b04ce28e1d28dfbd220173**
 
-Cherry pick below patches for End2End Scenario to work (as of today Feb22, 6 pm)
+Cherry pick below patches for End2End Scenario to work (as of today Feb23, 11 pm)
 ```
+https://gerrit.hyperledger.org/r/#/c/6379
 https://gerrit.hyperledger.org/r/#/c/5955
-https://gerrit.hyperledger.org/r/#/c/6335
 ```
 
-Clone fabric repo and this repo
+* Generate all **org certs** using behave.
 ```
-git clone https://github.com/hyperledger/fabric.git
-cd fabric
+cd fabric/bddtests
+behave -k -D cache-deployment-spec features/bootstrap.feature
 ```
+* Use awesome tool **configtxgen**  to create fabric channel configuration transaction and orderer bootstrap block.More details [here](https://github.com/hyperledger/fabric/blob/master/docs/configtxgen.md)
+Also refer the configtx.yaml available in this repo.
+
+```
+make configtxgen
+configtxgen configtxgen -profile FourOrgs -outputCreateChannelTx channel.tx -outputBlock orderer.blockname -channelID myc1;
+```
+
+
 Generate docker-images
 ```
 make docker
 ```
-Upon success you should see will see all the images similar to below
+Upon success you will see all the images similar to below
 
 ```
 $ docker images
@@ -172,7 +181,7 @@ A shellscript **single_channel.sh** is baked inside the cli conatiner, The scrip
 
     As a result of this command **myc1.block** will get created on the file system
 
-* peer0 (**peerOrg0** ) will **Join** the channel
+* peer0 from **peerOrg0** ) will **Join** the channel
 
 * **Install** chaincode *chaincode_sample*  on a remote **peer0**
 
@@ -190,16 +199,15 @@ docker logs -f cli
 
 At the end of the result you will see something like below:
 ```
-2017-02-22 19:09:14.482 UTC [logging] InitFromViper -> DEBU 001 Setting default logging level to DEBUG for command 'chaincode'
-2017-02-22 19:09:14.483 UTC [msp] GetLocalMSP -> DEBU 002 Returning existing local MSP
-2017-02-22 19:09:14.483 UTC [msp] GetDefaultSigningIdentity -> DEBU 003 Obtaining default signing identity
-2017-02-22 19:09:14.483 UTC [msp] Sign -> DEBU 004 Sign: plaintext: 0A8A050A54080322046D7963312A4035...0A06696E766F6B650A036765740A0161 
-2017-02-22 19:09:14.483 UTC [msp] Sign -> DEBU 005 Sign: digest: 91728931006A512F0CDC4B9850093FF6D7A2593B6C64B94E66F3630AB7F672E1 
+2017-02-24 01:31:53.191 UTC [logging] InitFromViper -> DEBU 001 Setting default logging level to DEBUG for command 'chaincode'
+2017-02-24 01:31:53.192 UTC [msp] GetLocalMSP -> DEBU 002 Returning existing local MSP
+2017-02-24 01:31:53.192 UTC [msp] GetDefaultSigningIdentity -> DEBU 003 Obtaining default signing identity
+2017-02-24 01:31:53.192 UTC [msp] Sign -> DEBU 004 Sign: plaintext: 0A8A050A54080322046D7963312A4032...0A06696E766F6B650A036765740A0161 
+2017-02-24 01:31:53.192 UTC [msp] Sign -> DEBU 005 Sign: digest: 2D47DF762A73DC6AA6F39D7332AC1E0EAD0FB53CD8DAB51B1E5F9063193A61F9 
 Query Result: yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou
-2017-02-22 19:09:14.491 UTC [main] main -> INFO 006 Exiting.....
+2017-02-24 01:31:53.198 UTC [main] main -> INFO 006 Exiting.....
 ===================== Query on chaincode on PEER0 is successful ===================== 
-===================== Single Channel Test execution completed ===================== 
-
+===================== ALL GOOD , E2E Test execution completed ===================== 
 ```
 
 #### How can I see chaincode logs ?
@@ -233,14 +241,14 @@ I am using  one peer only i.e, **peer1** for join/instantiate/invoke/query, So I
 CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050
 ORDERER_GENERAL_LOCALMSPDIR=/opt/gopath/src/github.com/hyperledger/fabric/chaincode_sample/crypto/peer/peer1/localMspConfig
 CORE_PEER_ADDRESS=$PEER1_IP:7051
-CORE_PEER_LOCALMSPID=MspOrg1
+CORE_PEER_LOCALMSPID=Org1MSP
 ```
 
 ####Create channel
 
-Specify the name of the channel  with **-c** option and **-f** must be suplied with Channel creation transaction i.e., **channelTx** (In this case it is **channelTx** , you can mount your own channel txn )
+Specify the name of the channel  with **-c** option and **-f** must be suplied with Channel creation transaction i.e., **channel.tx** (In this case it is **channelTx** , you can mount your own channel txn )
 ```
- peer channel create -c mychannel -f channelTx
+ peer channel create -c mychannel -f channel.tx
 ```
 
 ####Join channel
@@ -259,16 +267,17 @@ peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/
 ####Instantiate chaincode
 Instantiate chaincode, this will launch a chaincode container
 ```
-peer chaincode instantiate -C mychannel -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}' -P "AND('MspOrg1.member')"
+peer chaincode instantiate -C mychannel -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}' -P "AND('Org1MSP.member')"
 ```
 
 **NOTE:** 
 * After the above command you will notice a new chaincode container , something like **dev-peer1-mycc-1.0**
-* Also notice the Policy specified with **-P** option
+* Also notice the Endorsement Policy specified with **-P** option, that needs to be validated by System Chaincode (**VSCC**) , [more details]()
 
 ####Invoke chaincode
 
 ```
+https://github.com/hyperledger/fabric/blob/master/docs/endorsement-policies.md
 peer chaincode invoke -C mychannel -n mycc1 -c '{"function":"invoke","Args":["put","a","yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou"]}'
 ```
 
@@ -287,7 +296,7 @@ Query Result: yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou
 
 ###Troubleshoot
 
-1. If you are see the below error 
+If you are see the below error 
 ```
 Error: Error endorsing chaincode: rpc error: code = 2 desc = Error installing chaincode code mycc:1.0(chaincode /var/hyperledger/production/chaincodes/mycc.1.0 exits)
 ```
@@ -299,19 +308,19 @@ Remove them and retry again. here is a helper command
 docker rmi -f $(docker images | grep peer[0-9]-peer[0-9] | awk '{print $3}')
 ```
 
-###MISC
+###Misc
 Now you can launch network using a shell script
 ```
 ./network_setup up 
 ```
 Default option is to use hyperledger images
 
-If you don't want to build your own images, you can use my images by supplying the docker-compose file
+If you don't want to build fabric images, you can use my images by supplying the docker-compose file
 ```
 ./network_setup up docker-compose-ratnakar.yaml
 ```
 
-To cleanup the stuff, use **down**  option with the command
+To cleanup the network, use **down**  option with the command
 ```
 ./network_setup down
 ```
