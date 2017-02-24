@@ -17,9 +17,6 @@ echo "-----------------------------------------"
 
 CORE_PEER_GOSSIP_IGNORESECURITY=true
 CORE_PEER_COMMITTER_LEDGER_ORDERER=$ORDERER_IP:7050
-CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/chaincode_sample/crypto/peer/peer0/localMspConfig
-CORE_PEER_ADDRESS=$PEER0_IP:7051
-CORE_PEER_LOCALMSPID=Org0MSP
 
 verifyResult () {
 	if [ $1 -ne 0 ]; then
@@ -30,7 +27,6 @@ verifyResult () {
 	fi
 }
 
-###TODO: Add checks for the results
 peer channel create -c myc1 -f channel.tx>log.txt 2>&1 
 res=$?
 cat log.txt

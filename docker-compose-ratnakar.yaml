@@ -153,6 +153,8 @@ services:
       - CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050
       - CORE_PEER_ADDRESS=peer0:7051
       - CORE_PEER_GOSSIP_IGNORESECURITY=true
+      - CORE_PEER_LOCALMSPID=Org0MSP
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/msp/sampleconfig
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: sh -c './script.sh; sleep 100000'
     #command: /bin/bash
