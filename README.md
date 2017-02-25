@@ -117,7 +117,7 @@ Also refer the configtx.yaml available in this repo.
 
 ```
 make configtxgen
-configtxgen configtxgen -profile FourOrgs -outputCreateChannelTx channel.tx -outputBlock orderer.blockname -channelID myc1;
+configtxgen -profile FourOrgs -outputCreateChannelTx channel.tx -outputBlock orderer.block -channelID myc1;
 ```
 
 
