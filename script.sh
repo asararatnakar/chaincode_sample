@@ -22,7 +22,7 @@ verifyResult () {
 	if [ $1 -ne 0 ]; then
 		echo "!!!!!!!!!!!!!!! "$2" !!!!!!!!!!!!!!!!"
    		echo "========== ERROR !!! Please check peer logs to verify the issue ==========="
-   		echo "===================== FAILURED to execute E2E Scenario ====================="
+                echo "===================== FAILED to execute E2E Scenario ====================="
    		exit 1
 	fi
 }

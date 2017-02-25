@@ -50,7 +50,10 @@ if [ "${UP_DOWN}" == "up" ]; then
 		echo "Oooops !!!! Unable to pull the images "		
 		exit 1
 	fi
-	docker logs -f cli
+        #FIXME: This is a temporary fix for CI to run
+	echo "Please wait for 2 minutes to complete the E2E execution to complete"
+	sleep 120
+	docker logs cli
 elif [ "${UP_DOWN}" == "down" ]; then ##Clean up the network
         docker-compose -f $COMPOSE_FILE down
         #Cleanup the chaincode containers
