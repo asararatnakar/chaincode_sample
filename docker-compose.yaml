@@ -151,7 +151,7 @@ services:
       - CORE_PEER_LOCALMSPID=Org0MSP
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/msp/sampleconfig
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    command: sh -c './script.sh | tee  result.txt 2>&1; sleep 100000'
+    command: sh -c './script.sh | tee  results.log 2>&1; sleep 100000'
     #command: /bin/bash
     volumes:
         - /var/run/:/host/var/run/
@@ -160,7 +160,7 @@ services:
         - ./crypto/peer/peer0/localMspConfig:/opt/gopath/src/github.com/hyperledger/fabric/msp/sampleconfig
         - ./crypto:/opt/gopath/src/github.com/hyperledger/fabric/chaincode_sample/crypto/
         - ./script.sh:/opt/gopath/src/github.com/hyperledger/fabric/peer/script.sh
-        - ./result.txt:/opt/gopath/src/github.com/hyperledger/fabric/peer/result.txt
+        - ./results.log:/opt/gopath/src/github.com/hyperledger/fabric/peer/results.log
     depends_on:
       - orderer
       - peer0
