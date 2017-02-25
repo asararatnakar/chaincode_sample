@@ -171,5 +171,6 @@ services:
       - peer0
       - peer1
       - peer2
+      - peer3
     networks:
       - bridge
