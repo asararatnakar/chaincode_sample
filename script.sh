@@ -26,6 +26,15 @@ verifyResult () {
    		exit 1
 	fi
 }
+setGlobals () {
+	CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/chaincode_sample/crypto/peer/peer$1/localMspConfig
+	CORE_PEER_ADDRESS=peer$1:7051
+	if [ $1 -eq 0 -o $1 -eq 1 ] ; then
+		CORE_PEER_LOCALMSPID="Org0MSP"
+	else
+		CORE_PEER_LOCALMSPID="Org1MSP"
+	fi
+}
 
 peer channel create -c myc1 -f channel.tx>log.txt 2>&1 
 res=$?
@@ -35,9 +44,7 @@ verifyResult $res "Channel creation failed"
 echo "===================== channel \"myc1\" is created successfully ===================== "
 echo
 for ch in 0 1 2 3; do
-	CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/chaincode_sample/crypto/peer/peer$ch/localMspConfig
-	CORE_PEER_ADDRESS=peer$ch:7051
-	CORE_PEER_LOCALMSPID="Org"$ch"MSP"
+	setGlobals $ch
 	peer channel join -b myc1.block >log.txt 2>&1
 	res=$?
 	cat log.txt
@@ -45,41 +52,52 @@ for ch in 0 1 2 3; do
 	echo "===================== peer$ch joined on the channel \"myc1\" ===================== "
 done
 
-for ch in 0 1; do
-	CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/chaincode_sample/crypto/peer/peer$ch/localMspConfig
-	CORE_PEER_ADDRESS=peer$ch:7051
-	CORE_PEER_LOCALMSPID="Org"$ch"MSP"
+for ch in 0 2; do
+	setGlobals $ch
 	peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample >log.txt 2>&1
 	res=$?
 	cat log.txt
         verifyResult $res "Chaincode installation on remote peer PEER$ch is Failed"
 	echo "===================== Chaincode is installed on remote peer PEER$ch ===================== "
 done
-CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/chaincode_sample/crypto/peer/peer1/localMspConfig
-CORE_PEER_ADDRESS=$PEER1_IP:7051
-CORE_PEER_LOCALMSPID=Org1MSP
-peer chaincode instantiate -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}' -P "OR('Org0MSP.member','Org1MSP.member','Org2MSP.member','Org3MSP.member')" >log.txt 2>&1 
+PEER=2
+setGlobals $PEER
+peer chaincode instantiate -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}' -P "OR('Org0MSP.member','Org1MSP.member')" >log.txt 2>&1 
 res=$?
 cat log.txt
-verifyResult $res "Chaincode instantiation failed"
+verifyResult $res "Chaincode instantiation on PEER$PEER on ORG1 failed"
 
-echo "===================== chaincode Instantiation on PEER0 is successful ===================== "
+echo "===================== chaincode Instantiation on PEER$PEER is successful ===================== "
 sleep 15
+PEER=0
+setGlobals $PEER
+peer chaincode query -C myc1 -n mycc -c '{"function":"invoke","Args":["get","a"]}' >log.txt 2>&1
+res=$?
+cat log.txt
+verifyResult $res "Query execution on PEER$PEER failed "
+echo "===================== Query on chaincode on PEER$PEER on ORG0 is successful ===================== "
 
 peer chaincode invoke -C myc1 -n mycc -c '{"function":"invoke","Args":["put","a","yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou"]}' >log.txt 2>&1
 res=$?
 cat log.txt
-verifyResult $res "Invoke execution on PEER$ch failed "
-echo "===================== Invoke transaction on chaincode===================== "
+verifyResult $res "Invoke execution on PEER$PEER failed "
+echo "===================== Invoke transaction on PEER$PEER on ORG0 is successful ===================== "
 sleep 15
 
-#CORE_PEER_COMMITTER_LEDGER_ORDERER=$ORDERER_IP:7050 CORE_PEER_ADDRESS=$PEER0_IP:7051 
+PEER=3
+setGlobals $PEER
+peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample >log.txt 2>&1
+res=$?
+cat log.txt
+verifyResult $res "Chaincode installation on remote peer PEER$PEER is Failed"
+echo "===================== Chaincode is installed on remote peer PEER$PEER ===================== "
+
 peer chaincode query -C myc1 -n mycc -c '{"function":"invoke","Args":["get","a"]}' >log.txt 2>&1
 res=$?
 cat log.txt
-verifyResult $res "Query execution on PEER$ch failed "
+verifyResult $res "Query execution on PEER$PEER failed "
 grep -q "yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou" log.txt
-verifyResult $? "Query result on PEER$ch INVALID "
+verifyResult $? "Query result on PEER$PEER INVALID "
 
 echo "===================== Query on chaincode on PEER0 is successful ===================== "
 echo "===================== ALL GOOD , E2E Test execution completed ===================== "

@@ -11,7 +11,7 @@ Profiles:
 
     # SampleSingleMSPSolo defines a configuration which contains a single MSP
     # definition (the MSP sampleconfig).
-    FourOrgs:
+    TwoOrgs:
         Orderer:
             <<: *OrdererDefaults
             Organizations:
@@ -19,10 +19,8 @@ Profiles:
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *peerOrg0
-                - *peerOrg1
-                - *peerOrg2
-                - *peerOrg3
+                - *Org0
+                - *Org1
 
 ################################################################################
 #
@@ -33,6 +31,7 @@ Profiles:
 #
 ################################################################################
 Organizations:
+
     # SampleOrg defines an MSP using the sampleconfig.  It should never be used
     # in production but may be used as a template for other definitions
     - &OrdererOrg
@@ -46,78 +45,75 @@ Organizations:
         # MSPDir is the filesystem path which contains the MSP configuration
         MSPDir: chaincode_sample/crypto/orderer/localMspConfig
 
-    - &peerOrg0
+        # BCCSP (Blockchain crypto provider): Select which crypto implementation or
+        # library to use
+        BCCSP:
+            Default: SW
+            SW:
+                Hash: SHA3
+                Security: 256
+                # Location of Key Store. If this is unset, a location will 
+                # be chosen using 'MSPDir'/keystore
+                FileKeyStore: 
+                    KeyStore: 
+                
+    - &Org0
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: Org0
+        Name: Org0MSP
 
         # ID to load the MSP definition as
         ID: Org0MSP
 
-        # MSPDir is the filesystem path which contains the MSP configuration
-        #MSPDir: /opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode_sample/crypto/peer/peer0/localMspConfig
         MSPDir: chaincode_sample/crypto/peer/peer0/localMspConfig
+
+        # BCCSP (Blockchain crypto provider): Select which crypto implementation or
+        # library to use
+        BCCSP:
+            Default: SW
+            SW:
+                Hash: SHA3
+                Security: 256
+                # Location of Key Store. If this is unset, a location will 
+                # be chosen using 'MSPDir'/keystore
+                FileKeyStore: 
+                    KeyStore: 
+                
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: 172.19.0.3
+            - Host: peer0
               Port: 7051
 
-    - &peerOrg1
+    - &Org1
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
-        Name: Org1
+        Name: Org1MSP
 
         # ID to load the MSP definition as
         ID: Org1MSP
 
-        # MSPDir is the filesystem path which contains the MSP configuration
-        #MSPDir: /opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode_sample/crypto/peer/peer1/localMspConfig
-        MSPDir: chaincode_sample/crypto/peer/peer1/localMspConfig
-        AnchorPeers:
-            # AnchorPeers defines the location of peers which can be used
-            # for cross org gossip communication.  Note, this value is only
-            # encoded in the genesis block in the Application section context
-            - Host: 172.19.0.4
-              Port: 7051
-
-    - &peerOrg2
-        # DefaultOrg defines the organization which is used in the sampleconfig
-        # of the fabric.git development environment
-        Name: Org2
-
-        # ID to load the MSP definition as
-        ID: Org2MSP
-
-        # MSPDir is the filesystem path which contains the MSP configuration
         MSPDir: chaincode_sample/crypto/peer/peer2/localMspConfig
-        #MSPDir: /opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode_sample/crypto/peer/peer2/localMspConfig
+
+        # BCCSP (Blockchain crypto provider): Select which crypto implementation or
+        # library to use
+        BCCSP:
+            Default: SW
+            SW:
+                Hash: SHA3
+                Security: 256
+                # Location of Key Store. If this is unset, a location will 
+                # be chosen using 'MSPDir'/keystore
+                FileKeyStore: 
+                    KeyStore: 
+                
         AnchorPeers:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: 172.19.0.5
+            - Host: peer2
               Port: 7051
-
-    - &peerOrg3
-        # DefaultOrg defines the organization which is used in the sampleconfig
-        # of the fabric.git development environment
-        Name: Org3
-
-        # ID to load the MSP definition as
-        ID: Org3MSP
-
-        # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: chaincode_sample/crypto/peer/peer3/localMspConfig
-        #MSPDir: /opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode_sample/crypto/peer/peer3/localMspConfig
-        AnchorPeers:
-            # AnchorPeers defines the location of peers which can be used
-            # for cross org gossip communication.  Note, this value is only
-            # encoded in the genesis block in the Application section context
-            - Host: 172.19.0.6
-              Port: 7051
-
 
 ################################################################################
 #

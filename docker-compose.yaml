@@ -68,7 +68,7 @@ services:
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0:7051
       - CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050
       - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/msp/peer1/localMspConfig
-      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_LOCALMSPID=Org0MSP
     volumes:
         - /var/run/:/host/var/run/
         - ./crypto/peer/:/var/hyperledger/msp/
@@ -92,7 +92,7 @@ services:
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0:7051
       - CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050
       - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/msp/peer2/localMspConfig
-      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_LOCALMSPID=Org1MSP
     volumes:
         - /var/run/:/host/var/run/
         - ./crypto/peer/:/var/hyperledger/msp/
@@ -117,7 +117,7 @@ services:
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0:7051
       - CORE_PEER_COMMITTER_LEDGER_ORDERER=orderer:7050
       - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/msp/peer3/localMspConfig
-      - CORE_PEER_LOCALMSPID=Org3MSP
+      - CORE_PEER_LOCALMSPID=Org1MSP
     volumes:
         - /var/run/:/host/var/run/
         - ./crypto/peer/:/var/hyperledger/msp/
