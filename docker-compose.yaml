@@ -159,7 +159,7 @@ services:
         - ./crypto/orderer/channel.tx:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel.tx
         - ./crypto/peer/peer0/localMspConfig:/opt/gopath/src/github.com/hyperledger/fabric/msp/sampleconfig
         - ./crypto:/opt/gopath/src/github.com/hyperledger/fabric/chaincode_sample/crypto/
-        - ./single_channel.sh:/opt/gopath/src/github.com/hyperledger/fabric/peer/script.sh
+        - ./script.sh:/opt/gopath/src/github.com/hyperledger/fabric/peer/script.sh
     depends_on:
       - orderer
       - peer0

@@ -34,9 +34,6 @@ verifyResult $res "Channel creation failed"
 
 echo "===================== channel \"myc1\" is created successfully ===================== "
 echo
-#peer channel join -b myc1.block >log.txt 2>&1
-#cat log.txt
-#ORDERER_GENERAL_LOCALMSPDIR=/opt/gopath/src/github.com/hyperledger/fabric/chaincode_sample/crypto/peer/peer1/localMspConfig
 for ch in 0 1 2 3; do
 	CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/chaincode_sample/crypto/peer/peer$ch/localMspConfig
 	CORE_PEER_ADDRESS=peer$ch:7051
@@ -58,12 +55,10 @@ for ch in 0 1; do
         verifyResult $res "Chaincode installation on remote peer PEER$ch is Failed"
 	echo "===================== Chaincode is installed on remote peer PEER$ch ===================== "
 done
-#CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/chaincode_sample/crypto/peer/peer0/localMspConfig
 CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/chaincode_sample/crypto/peer/peer1/localMspConfig
 CORE_PEER_ADDRESS=$PEER1_IP:7051
 CORE_PEER_LOCALMSPID=Org1MSP
 peer chaincode instantiate -C myc1 -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_sample -c '{"Args":[""]}' -P "OR('Org0MSP.member','Org1MSP.member','Org2MSP.member','Org3MSP.member')" >log.txt 2>&1 
-#-P "OR('Org0MSP.member','Org1MSP.member')" >log.txt 2>&1
 res=$?
 cat log.txt
 verifyResult $res "Chaincode instantiation failed"
@@ -71,7 +66,6 @@ verifyResult $res "Chaincode instantiation failed"
 echo "===================== chaincode Instantiation on PEER0 is successful ===================== "
 sleep 15
 
-#CORE_PEER_COMMITTER_LEDGER_ORDERER=$ORDERER_IP:7050 CORE_PEER_ADDRESS=$PEER0_IP:7051 
 peer chaincode invoke -C myc1 -n mycc -c '{"function":"invoke","Args":["put","a","yugfoiuehyorye87y4yiushdofhjfjdsfjshdfsdkfsdifsdpiupisupoirusoiuou"]}' >log.txt 2>&1
 res=$?
 cat log.txt
